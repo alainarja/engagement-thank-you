@@ -23,7 +23,10 @@ export async function POST(request: NextRequest) {
     }
     
     const id = await createGuest(name, image)
-    return NextResponse.json({ id, name, image })
+    const guests = await getAllGuests()
+    const newGuest = guests.find(g => g.id === id)
+    
+    return NextResponse.json({ id, name, imageUrl: newGuest?.imageUrl || image })
   } catch (error) {
     console.error('Error creating guest:', error)
     return NextResponse.json({ error: 'Failed to create guest' }, { status: 500 })

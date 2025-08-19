@@ -12,7 +12,7 @@ import { toast } from "sonner"
 interface StoredGuest {
   id: string
   name: string
-  image: string
+  imageUrl: string
   createdAt: string
 }
 
@@ -36,8 +36,8 @@ export default function AdminUploadPage() {
         setStoredGuests(guests.map((g: any) => ({
           id: g.id,
           name: g.name,
-          image: g.image,
-          createdAt: g.created_at
+          imageUrl: g.imageUrl,
+          createdAt: g.created_at || g.createdAt
         })))
       }
     } catch (error) {
@@ -303,7 +303,7 @@ export default function AdminUploadPage() {
                       <div key={guest.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                         <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200">
                           <img
-                            src={guest.image}
+                            src={guest.imageUrl}
                             alt={guest.name}
                             className="w-full h-full object-cover"
                           />

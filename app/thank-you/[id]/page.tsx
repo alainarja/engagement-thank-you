@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 
 interface GuestData {
   name: string
-  image: string
+  imageUrl: string
   created_at: string
 }
 
@@ -88,7 +88,7 @@ export default function ThankYouPage() {
             {/* Guest Image */}
             <div className="relative h-80 md:h-96 overflow-hidden">
               <img
-                src={guestData.image}
+                src={guestData.imageUrl}
                 alt={guestData.name}
                 className="w-full h-full object-cover"
               />
