@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 interface GuestData {
   name: string
   image: string
-  createdAt: string
+  created_at: string
 }
 
 export default function ThankYouPage() {
@@ -17,13 +17,23 @@ export default function ThankYouPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const id = params.id as string
-    const storedData = localStorage.getItem(`guest_${id}`)
-    
-    if (storedData) {
-      setGuestData(JSON.parse(storedData))
+    const fetchGuest = async () => {
+      try {
+        const id = params.id as string
+        const response = await fetch(`/api/guests/${id}`)
+        
+        if (response.ok) {
+          const data = await response.json()
+          setGuestData(data)
+        }
+      } catch (error) {
+        console.error('Error fetching guest:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-    setIsLoading(false)
+
+    fetchGuest()
   }, [params.id])
 
   if (isLoading) {
