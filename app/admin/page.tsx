@@ -23,6 +23,7 @@ export default function AdminUploadPage() {
   const [generatedLink, setGeneratedLink] = useState("")
   const [isCopied, setIsCopied] = useState(false)
   const [storedGuests, setStoredGuests] = useState<StoredGuest[]>([])
+  const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     loadStoredGuests()
@@ -66,6 +67,8 @@ export default function AdminUploadPage() {
       return
     }
 
+    setIsGenerating(true)
+
     try {
       const response = await fetch('/api/guests', {
         method: 'POST',
@@ -92,12 +95,14 @@ export default function AdminUploadPage() {
       setGeneratedLink(thankYouUrl)
       
       // Reload guest list
-      loadStoredGuests()
+      await loadStoredGuests()
       
       toast.success("Thank you link generated successfully!")
     } catch (error) {
       console.error('Error creating guest:', error)
-      toast.error("Failed to generate thank you link")
+      toast.error(`Failed to generate thank you link: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsGenerating(false)
     }
   }
 
@@ -219,13 +224,23 @@ export default function AdminUploadPage() {
 
             {/* Generate Button */}
             <Button
+              type="button"
               onClick={generateThankYouLink}
-              disabled={!guestName || !imagePreview}
-              className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
+              disabled={!guestName || !imagePreview || isGenerating}
+              className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
               size="lg"
             >
-              <Link className="w-4 h-4 mr-2" />
-              Generate Thank You Link
+              {isGenerating ? (
+                <>
+                  <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Link className="w-4 h-4 mr-2" />
+                  Generate Thank You Link
+                </>
+              )}
             </Button>
 
             {/* Generated Link */}

@@ -53,7 +53,8 @@ export async function createGuest(name: string, imageBase64: string): Promise<st
     
     const blob = await put(filename, imageBuffer, {
       access: 'public',
-      contentType: 'image/jpeg'
+      contentType: 'image/jpeg',
+      token: process.env.BLOB_READ_WRITE_TOKEN
     })
     
     // Save to MongoDB
