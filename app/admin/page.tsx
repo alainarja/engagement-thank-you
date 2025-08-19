@@ -59,6 +59,8 @@ export default function AdminUploadPage() {
   }
 
   const generateThankYouLink = async () => {
+    console.log('Generate button clicked', { guestName, hasImage: !!imagePreview })
+    
     if (!guestName || !imagePreview) {
       toast.error("Please provide both name and image")
       return
@@ -77,10 +79,12 @@ export default function AdminUploadPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create guest')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create guest')
       }
 
       const data = await response.json()
+      console.log('Guest created:', data)
       
       // Generate link
       const baseUrl = window.location.origin
