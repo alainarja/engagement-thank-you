@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAllGuests, createGuest, deleteGuest } from '@/lib/db'
+import { getAllGuests, createGuest, deleteGuest } from '@/lib/storage'
 
 export async function GET() {
   try {
-    const guests = getAllGuests()
+    const guests = await getAllGuests()
     return NextResponse.json(guests)
   } catch (error) {
     console.error('Error fetching guests:', error)
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const id = createGuest(name, image)
+    const id = await createGuest(name, image)
     return NextResponse.json({ id, name, image })
   } catch (error) {
     console.error('Error creating guest:', error)
@@ -42,7 +42,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
     
-    const success = deleteGuest(id)
+    const success = await deleteGuest(id)
     
     if (!success) {
       return NextResponse.json(

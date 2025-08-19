@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getGuest } from '@/lib/db'
+import { getGuest } from '@/lib/storage'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const guest = getGuest(params.id)
+    const guest = await getGuest(params.id)
     
     if (!guest) {
       return NextResponse.json(
